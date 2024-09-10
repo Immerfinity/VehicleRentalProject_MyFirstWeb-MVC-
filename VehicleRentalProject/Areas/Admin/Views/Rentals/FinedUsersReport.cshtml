@@ -1,0 +1,45 @@
+﻿@model IEnumerable<VehicleRentalProject.Web.Models.ViewModels.Rental.FinedUserViewModel>
+
+@{
+    var culture = new System.Globalization.CultureInfo("be-BY");
+    ViewData["Title"] = "Отчет о всех оштрафованных пользователях";
+}
+
+<h2>Отчет о всех оштрафованных пользователях</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Номер аренды</th>
+            <th>Номер автомобиля</th>
+            <th>Дата начала</th>
+            <th>Дата возврата</th>
+            <th>Штрафная сумма</th>
+            <th>Пользователь</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rental in Model)
+        {
+            <tr>
+                <td>@rental.RentalId</td>
+                <td>@rental.VehicleNumber</td>
+                <td>@rental.StartDate.ToString("dd.MM.yyyy")</td>
+                <td>@rental.ReturnDate?.ToString("dd.MM.yyyy")</td>
+                <td>@rental.PenaltyAmount.ToString("C", culture)</td>
+                <td>@rental.UserName (@rental.FullName)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="ExportFinedUsersReportToPDF" class="btn btn-primary">Экспорт в PDF</a>
+
+<style>
+    th {
+        background-color: #f8f9fa;
+        color: #343a40;
+        font-weight: bold;
+        text-align: left;
+    }
+</style>

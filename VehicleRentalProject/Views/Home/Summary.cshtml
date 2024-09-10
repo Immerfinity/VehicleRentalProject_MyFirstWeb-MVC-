@@ -1,0 +1,93 @@
+﻿@model VehicleRentalProject.Web.Models.ViewModels.Vehicle.SummaryViewModel
+@{
+    ViewData["Title"] = "Summary";
+}
+
+<form id="summaryForm" asp-action="CompleteOrder" asp-controller="Home" method="post">
+    <div class="row">
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm border-0 rounded">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Детали аренды</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Имя:</label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="ApplicationUser.FullName" class="form-control-plaintext" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Адрес:</label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="ApplicationUser.Address" class="form-control-plaintext" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 rounded">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Детали заказа</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Номер машины:</span>
+                            <span>@Model.VehicleNumber</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Дата возврата:</span>
+                            <span>@Model.EndDate</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Продолжительность:</span>
+                            <span>@Model.TotalDuration дней</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Общая сумма</strong>
+                            <strong>@Model.TotalAmount.ToString("C")</strong>
+                        </li>
+                    </ul>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">Арендовать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="VehicleType" />
+    <input type="hidden" asp-for="StartDate" />
+    <input type="hidden" asp-for="EndDate" />
+    <input type="hidden" asp-for="TotalAmount" />
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#summaryForm').on('submit', function (event) {
+                event.preventDefault();
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Ваша заявка принята на рассмотрение.');
+                            setTimeout(function () {
+                                window.location.href = '@Url.Action("Index", "Home")';
+                            }, 1000);
+                        } else {
+                            alert('Произошла ошибка при отправке заявки: ' + response.error);
+                        }
+                    },
+                    error: function () {
+                        alert('Произошла ошибка при отправке заявки.');
+                    }
+                });
+            });
+        });
+    </script>
+}

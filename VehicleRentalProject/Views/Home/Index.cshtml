@@ -1,0 +1,68 @@
+﻿@model List<VehicleRentalProject.Models.ViewModels.Vehicle.VehicleViewModel>
+
+@{
+    ViewData["Title"] = "Список машин";
+}
+
+<h1 class="mb-4">Список машин</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card mb-3 shadow-lg border-0">
+            <div class="card-body">
+                <h4 class="card-title text-center">Поиск</h4>
+                <form method="get" action="@Url.Action("Index", "Home")">
+                    <div class="form-group mb-3">
+                        <input type="text" name="search" class="form-control" placeholder="Поиск по названию">
+                    </div>
+                    <div class="form-group mb-3">
+                        <select name="type" class="form-control">
+                            <option value="">Выберите тип</option>
+                            <option value="Седан">Седан</option>
+                            <option value="Купе">Купе</option>
+                            <option value="Универсал">Универсал</option>
+                            <option value="Хэтчбек">Хэтчбек</option>
+                            <option value="Внедорожник">Внедорожник</option>
+                            <option value="Кроссовер">Кроссовер</option>
+                            <option value="Пикап">Пикап</option>
+                            <option value="Минивэн">Минивэн</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Поиск</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="row mb-3">
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <a href="@Url.Action("Index", new { sortOrder = "rate_asc" })" class="btn btn-outline-primary mx-1">Сортировать по цене (возрастание)</a>
+                    <a href="@Url.Action("Index", new { sortOrder = "rate_desc" })" class="btn btn-outline-primary mx-1">Сортировать по цене (убывание)</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var vehicle in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-lg border-0 h-100">
+                        <div class="position-relative">
+                            <img src="@vehicle.VehicleImage" class="card-img-top" alt="@vehicle.VehicleName">
+                            <div class="card-img-overlay d-flex flex-column justify-content-end p-0">
+                                <div class="bg-dark bg-opacity-50 text-white p-2">
+                                    <h5 class="card-title">@vehicle.VehicleName</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <div class="mt-auto">
+                                <a href="@Url.Action("Details", "Home", new { id = vehicle.Id })" class="btn btn-primary w-100">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

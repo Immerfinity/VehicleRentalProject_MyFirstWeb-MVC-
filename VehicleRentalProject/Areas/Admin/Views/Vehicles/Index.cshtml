@@ -1,0 +1,104 @@
+﻿@using VehicleRentalProject.Models.ViewModels.Vehicle
+@model ListVehicleViewModel
+
+@{
+    ViewData["Title"] = "Список машин";
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Домашняя страница</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Список машин</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Список машин</h5>
+            <h5 class="card-title"><a asp-action="Create" class="btn btn-success">Добавить новую машину</a></h5>
+            <form method="get" action="">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="searchingText" placeholder="Поиск..." />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit" id="buttonSubmit">Найти</button>
+                    </div>
+                </div>
+            </form>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Название</th>
+                        <th>Тип</th>
+                        <th>Модель</th>
+                        <th>Номер</th>
+                        <th>Цвет</th>
+                        <th>Описание</th>
+                        <th>Изображение</th>
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.VehicleList.Any())
+                    {
+                        foreach (var vehicle in Model.VehicleList)
+                        {
+                            <tr>
+                                <td>@vehicle.Id</td>
+                                <td>@vehicle.VehicleName</td>
+                                <td>@vehicle.VehicleType</td>
+                                <td>@vehicle.VehicleModel</td>
+                                <td>@vehicle.VehicleNumber</td>
+                                <td>@vehicle.VehicleColor</td>
+                                <td>@vehicle.VehicleDescription</td>
+                                <td><img src="@vehicle.VehicleImage" width="100" height="80" /></td>
+                                <td>
+                                    <a class="btn btn-primary" asp-action="Edit" asp-route-Id="@vehicle.Id">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                        </svg>
+                                    </a>
+                                    <a class="btn btn-danger" asp-action="Delete" asp-route-Id="@vehicle.Id">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="11" class="text-center">Машины не найдены.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (Model.PageInfo.TotalPages > 1)
+            {
+                <nav aria-label="Страница навигации">
+                    <ul class="pagination">
+                        @if (Model.PageInfo.HasPreviousPage)
+                        {
+                            <li class="page-item"><a class="page-link" href="?pageNumber=@(Model.PageInfo.CurrentPage - 1)">Предыдущая</a></li>
+                        }
+                        @for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
+                        {
+                            <li class="page-item @(Model.PageInfo.CurrentPage == i ? "active" : "")"><a class="page-link" href="?pageNumber=@i">@i</a></li>
+                        }
+                        @if (Model.PageInfo.HasNextPage)
+                        {
+                            <li class="page-item"><a class="page-link" href="?pageNumber=@(Model.PageInfo.CurrentPage + 1)">Следующая</a></li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>

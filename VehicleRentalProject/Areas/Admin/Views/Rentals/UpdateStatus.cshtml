@@ -1,0 +1,45 @@
+﻿@model VehicleRentalProject.Web.Models.ViewModels.Rental.UpdateRentalStatusViewModel
+
+@{
+    ViewData["Title"] = "Изменить статус заявки";
+}
+
+<h2>Изменить статус заявки</h2>
+<form asp-action="UpdateStatus" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label>Клиент</label>
+        <input type="text" class="form-control" value="@Model.ApplicationUser" readonly />
+    </div>
+    <div class="form-group">
+        <label>Номер автомобиля</label>
+        <input type="text" class="form-control" value="@Model.VehicleNumber" readonly />
+    </div>
+    <div class="form-group">
+        <label>Дата начала</label>
+        <input type="text" class="form-control" value="@Model.StartDate.ToString("dd.MM.yyyy")" readonly />
+    </div>
+    <div class="form-group">
+        <label>Дата возврата</label>
+        <input type="text" class="form-control" value="@Model.ReturnDate?.ToString("dd.MM.yyyy")" readonly />
+    </div>
+    <div class="form-group">
+        <label>Штрафная сумма</label>
+        <input type="text" asp-for="PenaltyAmount" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Общая цена</label>
+        <input type="text" class="form-control" value="@Model.TotalPrice" readonly />
+    </div>
+
+    <div class="form-group">
+        <label>Статус</label>
+        <select asp-for="Status" class="form-control">
+            <option value="На рассмотрении">На рассмотрении</option>
+            <option value="Одобрено">Одобрено</option>
+            <option value="Не одобрено">Не одобрено</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+</form>

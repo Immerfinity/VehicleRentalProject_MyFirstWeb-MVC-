@@ -1,0 +1,73 @@
+﻿@using VehicleRentalProject.Web.Models.ViewModels.Vehicle
+@model VehicleDetailsViewModel
+@{
+    ViewData["Title"] = "Детали";
+}
+
+<form asp-action="Summary" method="post" id="summaryForm" class="mt-4">
+    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+    <div class="row">
+        <div class="col-md-4">
+            <img src="\@Model.VehicleImage" alt="Изображение автомобиля" class="img-fluid rounded" />
+            <input type="hidden" asp-for="VehicleImage" />
+            <input type="hidden" asp-for="Id" />
+        </div>
+        <div class="col-md-8">
+            <h2>@Model.VehicleName</h2>
+            <input type="hidden" asp-for="VehicleName" />
+            <div class="form-group">
+                <label>Тип Автомобиля:</label>
+                <input readonly asp-for="VehicleType" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Модель Автомобиля:</label>
+                <input readonly asp-for="VehicleModel" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Номер Автомобиля:</label>
+                <input readonly asp-for="VehicleNumber" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Цвет Автомобиля:</label>
+                <input readonly asp-for="VehicleColor" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Дневная ставка:</label>
+                <input readonly asp-for="DailyRate" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate">Дата начала аренды:</label>
+                <input asp-for="StartDate" class="form-control" id="StartDate" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate">Дата окончания аренды:</label>
+                <input asp-for="EndDate" class="form-control" id="EndDate" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Дополнительная информация:</label>
+                <textarea readonly asp-for="VehicleDescription" class="form-control"></textarea>
+                <span asp-validation-for="VehicleDescription" class="text-danger"></span>
+            </div>
+            <button class="btn btn-primary">Арендовать</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#summaryForm').on('submit', function (event) {
+                var startDate = new Date($('#StartDate').val());
+                var endDate = new Date($('#EndDate').val());
+
+                if (endDate < startDate) {
+                    event.preventDefault();
+                    alert('Дата окончания аренды не может быть раньше даты начала аренды.');
+                }
+            });
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,43 @@
+﻿@model List<VehicleRentalProject.Web.Models.ViewModels.Rental.RentalHistoryViewModel>
+
+@{
+    var culture = new System.Globalization.CultureInfo("be-BY");
+    ViewData["Title"] = "История бронирований";
+}
+
+<h2>История бронирований</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Номер машины</th>
+            <th>Дата начала</th>
+            <th>Дата возврата</th>
+            <th>Штрафная сумма</th>
+            <th>Сумма аренды</th>
+            <th>Статус</th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.VehicleNumber</td>
+                <td>@item.StartDate.ToShortDateString()</td>
+                <td>@item.ReturnDate?.ToShortDateString()</td>
+                <td>@item.PenaltyAmount.ToString("C", culture)</td>
+                <td>@item.TotalPrice.ToString("C", culture)</td>
+                <td>@item.Status</td>
+                <td>
+                    @if (item.Status == "На рассмотрении")
+                    {
+                        <form asp-action="Delete" method="post">
+                            <input type="hidden" name="id" value="@item.RentalId" />
+                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

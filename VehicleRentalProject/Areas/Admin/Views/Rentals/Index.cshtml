@@ -1,0 +1,47 @@
+﻿@model IEnumerable<VehicleRentalProject.Web.Models.ViewModels.Rental.RentalHistoryViewModel>
+@{
+    var culture = new System.Globalization.CultureInfo("be-BY");
+    ViewData["Title"] = "Все заявки на аренду";
+}
+
+<h2>Все заявки на аренду</h2>
+
+<div class="mb-3">
+    <a asp-area="Admin" asp-controller="Rentals" asp-action="FinedUsersReport" class="btn btn-info">Отчет о всех оштрафованных пользователях</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Номер автомобиля</th>
+            <th>Дата начала</th>
+            <th>Дата возврата</th>
+            <th>Штрафная сумма</th>
+            <th>Сумма аренды</th>
+            <th>Клиент</th>
+            <th>Статус</th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rental in Model)
+        {
+            <tr>
+                <td>@rental.VehicleNumber</td>
+                <td>@rental.StartDate.ToString("dd.MM.yyyy")</td>
+                <td>@rental.ReturnDate?.ToString("dd.MM.yyyy")</td>
+                <td>@rental.PenaltyAmount.ToString("C", culture)</td>
+                <td>@rental.TotalPrice.ToString("C", culture)</td>
+                <td>@(rental.ApplicationUser != null ? rental.ApplicationUser.UserName : "Неизвестный пользователь")</td>
+                <td>@rental.Status</td>
+                <td>
+                    <a asp-action="UpdateStatus" asp-route-id="@rental.RentalId" class="btn btn-primary">Изменить статус</a>
+                    @if (rental.Status == "Одобрено")
+                    {
+                        <a asp-action="GenerateRentalAgreement" asp-route-id="@rental.RentalId" class="btn btn-success">Создать отчет</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
